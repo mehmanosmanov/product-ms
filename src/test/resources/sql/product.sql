@@ -1,0 +1,1 @@
+insert into products values (1, 3, 6.50, 'Test');

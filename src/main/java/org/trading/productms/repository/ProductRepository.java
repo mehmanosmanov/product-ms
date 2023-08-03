@@ -1,6 +1,7 @@
 package org.trading.productms.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import org.trading.productms.entity.Product;
 
@@ -10,4 +11,5 @@ import org.trading.productms.entity.Product;
  */
 @Repository
 public interface ProductRepository extends JpaRepository<Product,Long> {
+
 }

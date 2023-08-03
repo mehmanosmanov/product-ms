@@ -2,7 +2,12 @@ package org.trading.productms.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.circuitbreaker.resilience4j.Resilience4JCircuitBreakerFactory;
+import org.springframework.cloud.client.circuitbreaker.CircuitBreaker;
+import org.springframework.cloud.client.circuitbreaker.CircuitBreakerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 import org.trading.productms.dto.request.ProductRequest;
 import org.trading.productms.dto.response.ProductResponse;
 import org.trading.productms.entity.Product;
@@ -39,9 +44,11 @@ public class ProductServiceImpl implements ProductService {
 
    @Override
    public boolean decreaseCountByCount(Long id, int count) {
+      log.info("Start to decrease count");
       Product product = repository.findById(id).orElseThrow(
               () -> new NotFoundException("Not found product with such id=" + id));
       if (product.getCount() < count) {
+         log.warn("Insufficient count");
          throw new InsufficientCount();
       }
       var amount = product.getCount() - count;
@@ -52,6 +59,7 @@ public class ProductServiceImpl implements ProductService {
 
    @Override
    public boolean increaseCountByCount(Long id, int count) {
+      log.info("Start to increase count");
       Product product = repository.findById(id).orElseThrow(
               () -> new NotFoundException("Not found customer with such id=" + id));
       var amount = product.getCount() + count;
@@ -59,4 +67,17 @@ public class ProductServiceImpl implements ProductService {
       repository.save(product);
       return true;
    }
+//
+//   private final CircuitBreakerFactory factory;
+//
+//   public ProductResponse circuit(Long id) {
+//      RestTemplate restTemplate = new RestTemplate();
+//      String uri = "http://localhost:8082/product/make/" + id;
+//      CircuitBreaker circuitBreaker = factory.create("circuitBreaker");
+//      return circuitBreaker.run(
+//              () -> restTemplate.getForObject(uri, ProductResponse.class),
+//              throwable -> new ProductResponse()
+//      );
+//
+//   }
 }

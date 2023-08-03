@@ -1,21 +1,23 @@
 package org.trading.productms.controller;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 import org.trading.productms.dto.request.ProductRequest;
 import org.trading.productms.dto.response.ProductResponse;
 import org.trading.productms.service.ProductService;
+import org.trading.productms.service.ProductServiceImpl;
 
 /**
  * @author Mehman on 18-07-2023
  * @project product-ms
  */
 @RestController
-@RequestMapping("/make")
 @RequiredArgsConstructor
+@Slf4j
 public class ProductController {
-
 
    private final ProductService productService;
 
@@ -29,14 +31,21 @@ public class ProductController {
       return ResponseEntity.ok(productService.getProductById(id));
    }
 
-   @PutMapping("/decrease")
-   public boolean decreaseCountByCount(@RequestParam Long id, @RequestParam int amount) {
-      return productService.decreaseCountByCount(id, amount);
+   @GetMapping("/decrease/{id}/{count}")
+   public ResponseEntity<Boolean> decreaseCountByCount(@PathVariable Long id, @PathVariable int count) {
+      return ResponseEntity.ok(productService.decreaseCountByCount(id, count));
    }
 
-   @PutMapping("/increase")
-   public boolean increaseCountByCount(@RequestParam Long id, @RequestParam int amount) {
-      return productService.increaseCountByCount(id, amount);
+   @GetMapping("/increase/{id}/{count}")
+   public ResponseEntity<Boolean> increaseCountByCount(@PathVariable Long id, @PathVariable int count) {
+      return ResponseEntity.ok(productService.increaseCountByCount(id, count));
    }
 
+
+   private final ProductServiceImpl serImpl;
+
+//   @GetMapping("/circuit/{id}")
+//   public ProductResponse circuitMethod(@PathVariable Long id) {
+//      return serImpl.circuit(id);
+//   }
 }
