@@ -33,8 +33,6 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class ProductServiceImplTest {
 
-
-
     @InjectMocks
     private ProductServiceImpl productService;
 
